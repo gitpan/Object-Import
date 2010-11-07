@@ -1,0 +1,13 @@
+2010-11-07 v1.001 release to cpan
+ - target package option
+ - distribution stuff: Makefile.PL, README, TODO
+ - some tests
+ - support for IO handles
+ - save list of names exported to hash
+ - add prefix/suffix to names
+ - exclude some special method names, also underscored names
+ - importing with explicit list of method names
+ - documentation with examples
+ - converting to real module
+2010-06-13 v1.000
+ - toy prototype at http://www.perlmonks.com/?node_id=849373
