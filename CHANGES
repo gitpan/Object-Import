@@ -1,3 +1,10 @@
+2011-01-26 v1.002 release to CPAN
+ - properly document deref option
+ - method called through Object::Import changing its invocant didn't use to have any effect,
+    now it changes the imported object
+ - a few new tests (t/09_parm.t, t/10_alias.t)
+ - fix test failures on Windows where I forgot to binmode a handle
+ - fixed some misplaced text in the docs
 2010-11-07 v1.001 release to cpan
  - target package option
  - distribution stuff: Makefile.PL, README, TODO

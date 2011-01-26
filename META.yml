@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:               Object-Import
-version:            1.001
+version:            1.002
 abstract:           import methods of an object as functions to a package
 author:  []
 license:            unknown

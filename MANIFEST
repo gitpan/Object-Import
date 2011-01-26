@@ -16,3 +16,6 @@ t/05_nometh.t
 t/06_deref.t
 t/07_mary.t
 t/08_target.t
+t/09_parm.t
+t/10_alias.t
+

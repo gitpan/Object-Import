@@ -1,5 +1,7 @@
 TODO for Object::Import perl module
 
+= bugs =
+
 = features =
 - options to exclude subs inherited from some packages,
     and maybe some defaults (like Exporter)
@@ -14,8 +16,6 @@ TODO for Object::Import perl module
     (this may not be a good idea)
 
 = documentation =
-- examples for deref
-- fix example in docs for target option
 
 = distribution =
 - possibly put "DSL" in the NAME line of the pod (as in 'domain specific language'?)

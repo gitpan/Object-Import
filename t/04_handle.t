@@ -1,5 +1,5 @@
 use warnings; use strict;
-use Test::More tests => 53;
+use Test::More tests => 56;
 
 BEGIN { 
 require_ok("IO::File");
@@ -9,10 +9,12 @@ require_ok("Object::Import");
 
 my(my $TT, my $tn) = tempfile(UNLINK => 1);
 ok($tn, "timefile name");
+ok(binmode($TT));
 
 SKIP: {
 ok(open(TI, "+>", $tn), "open ti") or
-	skip("could not open ti ($tn): $!", 24);
+	skip("could not open ti ($tn): $!", 25);
+ok(binmode(TI), "binmode ti");
 bless(*TI{IO}, IO::File::);
 
 import Object::Import *TI, prefix => "ti";
@@ -40,7 +42,8 @@ ok(ticlose(), "&ticlose");
 
 SKIP: {
 ok(open(my $TL, "+>", $tn), "open tl") or
-	skip("could not open tl ($tn): $!", 9);
+	skip("could not open tl ($tn): $!", 10);
+ok(binmode($TL), "binmode tl");
 bless(*$TL{IO}, IO::File::);
 
 import Object::Import $TL, prefix => "tl";
