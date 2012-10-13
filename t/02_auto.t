@@ -2,17 +2,21 @@ use warnings; no warnings qw"prototype"; use strict;
 use Test::More tests => 39;
 
 BEGIN { 
-$::W = 0;
+$::W4 = 0;
 $SIG{__WARN__} = sub { 
 	my($t) = @_;
+	if ($t =~ m"\Awarning: Object::Import cannot find methods of " ||
+		$t =~ m"\ASubroutine .* redefined at .*\bObject/Import\.pm ") 
+	{
+		$::W4++;
+	}
 	warn $t;
-	$::W++;
 };
 }
 
 use Object::Import ();
 
-is($::W, 0, "no warn 0");
+is($::W4, 0, "no warn 0");
 
 {
 package X0;
@@ -40,7 +44,7 @@ import Object::Import bless(["welcome"], X0::), list => ["greet"], nowarn_redefi
 is(greet("world"), "welcome, world", "G0.2 &greet");
 }
 
-is($::W, 0, "no warn G0");
+is($::W4, 0, "no warn G0");
 
 {
 package X1;
@@ -100,6 +104,6 @@ is(cos(0), 1, "G2 COREcos");
 is(getprotobynumber(1), "icmp", "G2 COREgetprotobynumber");
 }
 
-is($::W, 0, "no warn");
+is($::W4, 0, "no warn");
 
 __END__

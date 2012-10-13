@@ -4,11 +4,15 @@ use Test::More tests => 12;
 # some basic tests on whether arguments and returns are passed correctly
 
 BEGIN { 
-$::W = 0;
+$::W4 = 0;
 $SIG{__WARN__} = sub { 
 	my($t) = @_;
+	if ($t =~ m"\Awarning: Object::Import cannot find methods of " ||
+		$t =~ m"\ASubroutine .* redefined at .*\bObject/Import\.pm ") 
+	{
+		$::W4++;
+	}
 	warn $t;
-	$::W++;
 };
 }
 
@@ -57,6 +61,6 @@ is(ref(bsl($t)), "SCALAR", "bsl");
 is(bsl($t), \$t, "bsl");
 }
 
-is($::W, 0, "no warn");
+is($::W4, 0, "no warn");
 
 __END__

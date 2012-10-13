@@ -1,20 +1,26 @@
 use warnings; no warnings qw"uninitialized reserved prototype"; use strict;
-use Test::More tests => 23;
+use Test::More tests => 34;
 
 BEGIN { 
-$::W = 0; $::W1 = 0;
+$::W1 = $::W2 = $::W3 = 0; 
 $SIG{__WARN__} = sub { 
 	my($t) = @_;
-	$::W++;
-	if ($t =~ /Subroutine G1::greet redefined/) {
+	if ($t =~ m"\ASubroutine G1::greet redefined at .*\bObject/Import\.pm ") {
 		$::W1++;
+	} elsif ($t =~ /\Awarning: Object::Import cannot find methods of /) {
+		$::W2++;
+	} elsif ($t =~ m"\ASubroutine .* redefined at .*\bObject/Import\.pm ") {
+		$::W3++;
 	} else {
 		warn $t;
 	}
 };
 }
 
-is($::W, 0, "no warn 0");
+is($::W1, 0, "no warn redefined 0");
+is($::W2, 0, "no warn nometh 0");
+is($::W3, 0, "no warn redefined other 0");
+$::W1 = $::W2 = $::W3 = 0; 
 
 {
 package X;
@@ -39,7 +45,10 @@ is(greet("world"), "hello, world", "G0 &greet");
 
 use Object::Import bless(["hello"], X::), list => ["greet"];
 
-is($::W, 0, "no warn G0");
+is($::W1, 0, "no warn redefined G0");
+is($::W2, 0, "no warn nometh G0");
+is($::W3, 0, "no warn redefined other G0");
+$::W1 = $::W2 = $::W3 = 0; 
 }
 
 {
@@ -62,24 +71,34 @@ is($v, "hey, ", "G1.1 greet");
 $v = eval q'no strict; greet world';
 is($@, "", "G1.1 greet w err");
 is($v, "hey, world", "G1.1 greet w");
-is($::W, 0, "no warn G1.1");
+is($::W1, 0, "no warn redefined G1.1");
+is($::W2, 0, "no warn nometh G1.1");
+is($::W3, 0, "no warn redefined other G1.1");
+$::W1 = $::W2 = $::W3 = 0; 
 
 import Object::Import Hi::, list => ["greet"], nowarn_redefine => 1; 
 
 ok(defined(&greet), "G1.2 def&greet");
 is(greet("perl"), "Hi, perl", "G1.2 &greet");
-is($::W, 0, "no warn G1.2");
+is($::W1, 0, "no warn redefined G1.2");
+is($::W2, 0, "no warn nometh G1.2");
+is($::W3, 0, "no warn redefined other G1.2");
+$::W1 = $::W2 = $::W3 = 0; 
 
 import Object::Import bless(["welcome"], Hi::), list => ["greet"]; 
 
 ok(defined(&greet), "G1.3 def&greet");
 is(greet("perl"), "welcome, perl", "G1.3 &greet");
-is($::W, 1, "warn G1.3");
-is($::W1, 1, "warnt G1.3");
+is($::W1, 1, "warn redefined G1.3");
+is($::W2, 0, "no warn nometh G1.3");
+is($::W3, 0, "no warn redefined other G1.3");
+$::W1 = $::W2 = $::W3 = 0; 
 
 use Object::Import bless(["hullo"], X::), list => ["thank"];
 }
 
-is($::W, 1, "warn \$");
+is($::W1, 0, "no warn redefined \$");
+is($::W2, 0, "no warn nometh \$");
+is($::W3, 0, "no warn redefined other \$");
 
 __END__

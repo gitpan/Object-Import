@@ -49,6 +49,10 @@ If you're not familiar with the procedure of installing a perl module,
 you may want to read 
 "http://search.cpan.org/~jesse/perl-5.12.2/pod/perlmodinstall.pod".
 
+SEE ALSO
+
+Class::Exporter, Scope::With, Sub::Exporter, Acme::Nooo
+
 BUGS
 
 Please report bugs using the CPAN bug tracker (under the distribution

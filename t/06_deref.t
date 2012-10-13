@@ -2,15 +2,19 @@ use warnings; use strict;
 use Test::More tests => 33;
 
 BEGIN { 
-$::W = 0;
+$::W4 = 0;
 $SIG{__WARN__} = sub { 
 	my($t) = @_;
+	if ($t =~ m"\Awarning: Object::Import cannot find methods of " ||
+		$t =~ m"\ASubroutine .* redefined at .*\bObject/Import\.pm ") 
+	{
+		$::W4++;
+	}
 	warn $t;
-	$::W++;
 };
 }
 
-is($::W, 0, "no warn 0");
+is($::W4, 0, "no warn 0");
 
 BEGIN { 
 require_ok("Math::BigInt"); 
@@ -94,6 +98,6 @@ for (qw"hrgreet grgreet srgreet") {
 }
 }
 
-is($::W, 0, "no warn");
+is($::W4, 0, "no warn");
 
 __END__

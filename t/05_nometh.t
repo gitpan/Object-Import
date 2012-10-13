@@ -4,10 +4,9 @@ use Test::More tests => 21;
 use Object::Import;
 
 BEGIN { 
-	$::W = 0; $::W1 = 0;
+	$::W1 = 0;
 	$SIG{__WARN__} = sub { 
 		my($t) = @_;
-		$::W++;
 		if ($t =~ /\Awarning: Object::Import cannot find methods of /) 
 			{ $::W1++; } 
 		else
@@ -16,10 +15,35 @@ BEGIN {
 }
 
 
-{ no strict "refs"; *{"=k::greet"} = sub { "hello" }; }
 sub greet { "sorry" };
 
-is($::W, 0, "no warn 0");
+{ 
+no strict "refs"; 
+*{"=k::greet"} = sub { "hello" }; 
+}
+
+
+{
+	{
+	no strict "refs";
+	*{"|m::crazy"} = sub { $::crazy_pkg_allowed++; };
+	}
+	$::crazy_ok = eval { "|m"->crazy(); 1 };
+	$::crazy_err = $@;
+	is(!!$::crazy_ok, !!$::crazy_pkg_allowed, "punctuation package method ran iff call not died");
+	is(!!$::crazy_ok, !$::crazy_err, "punctuation package method ran iff no exception");
+	SKIP: {
+	$::crazy_ok and skip "punctuation package method call allowed", 2;
+	like($::crazy_err, qr/\ACan't call method "crazy" without a package or object reference /, "punctuation package method correct error message");
+	cmp_ok($], "<", 5.017005, "punctuation package allowed on new enough perl");
+	}
+	SKIP: {
+	!$::crazy_ok and skip "punctuation package method call not allowed", 1;
+	cmp_ok(5.0160015, "<", $], "punctuation package name allowed only on new perl");
+	}
+}
+
+is($::W1, 0, "no warn 0");
 
 {
 package G0;
@@ -30,18 +54,17 @@ for my $testrec (
 	["hello", "nonexistant package"],
 	["!", "invalid string"],
 	["", "empty string"],
-	["=k", "package with wrong name"],
+	["=k", "package with wrong name", $::crazy_ok],
 ) {
-	my($obj, $desc) = @$testrec;
-	my @n;
+	my($obj, $desc, $expect) = @$testrec;
+	my %n;
 	
-	import Object::Import $obj, savenames => \@n;
+	import Object::Import $obj, savenames => \%n;
 
-	is_deeply(\@n, [], "no import from $desc");
-	ok(!exists(&greet), "G0.1 !exi&greet from $desc");
-	is($::W, 1, "warn $desc");
-	is($::W1, 1, "warnt $desc");
-	$::W = $::W1 = 0;
+	is_deeply(\%n, $expect ? {"greet" => 1} : {}, ($expect ? "one" : "no") . " import from $desc");
+	is(exists(&greet), !!$expect, "G0.1 !exi&greet from $desc");
+	is($::W1, 0+!$expect, "warnt $desc");
+	$::W1 = 0;
 }
 }
 

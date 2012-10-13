@@ -1,7 +1,6 @@
 package Object::Import;
 use warnings; 
-use strict;
-our $VERSION = 1.002;
+our $VERSION = 1.003;
 
 
 =head1 NAME
@@ -398,7 +397,7 @@ in C<DSL.pm>.
 
 =head1 SEE ALSO
 
-L<Class::Exporter>, L<Scope::With>, L<Sub::Exporter>
+L<Class::Exporter>, L<Scope::With>, L<Sub::Exporter>, L<Acme::Nooo>
 
 =head1 BUGS
 
@@ -435,6 +434,8 @@ be found in the source tree under the name "ARTISTIC", or else see
 =cut
 
 
+use strict;
+use 5.007;
 use Scalar::Util qw"blessed reftype";
 eval "
 use MRO::Compat;
@@ -507,6 +508,7 @@ $special_target{$_}++ for qw"
 	syswrite tell telldir tie tied time times truncate uc ucfirst
 	umask undef unless unlink unpack unshift untie until use utime
 	values vec wait waitpid wantarray warn when while write
+	fc evalbytes __SUB__ __FILE__ __LINE__ __PACKAGE__
 ";
 # The following four are UNIVERSAL functions.
 $special_source{$_}++, $special_target{$_}++ for qw"can isa DOES VERSION"; 

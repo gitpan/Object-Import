@@ -10,7 +10,7 @@ WriteMakefile(
 		"IO::Handle" => 0,
 		"strict" => 0,
 	},
-	MIN_PERL_VERSION => 5.00600, # our
+	MIN_PERL_VERSION => 5.00800, # /\pL/
 	BUILD_REQUIRES => {
 		"MRO::Compat" => 0, # alternately mro 0 is okay
 		"Scalar::Util" => 0,

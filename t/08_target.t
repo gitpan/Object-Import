@@ -3,15 +3,19 @@ use Test::More tests => 9;
 use Scalar::Util;
 
 BEGIN { 
-$::W = 0;
+$::W4 = 0;
 $SIG{__WARN__} = sub { 
 	my($t) = @_;
-	$::W++;
+	if ($t =~ m"\Awarning: Object::Import cannot find methods of " ||
+		$t =~ m"\ASubroutine .* redefined at .*\bObject/Import\.pm ") 
+	{
+		$::W4++;
+	}
 	warn $t;
 };
 }
 
-is($::W, 0, "no warn 0");
+is($::W4, 0, "no warn 0");
 
 {
 package X;
@@ -96,7 +100,7 @@ is(greet("world"), "hello, world", "G0 &greet");
 $$G0::obj[0] = "bye";
 is(greet("world"), "bye, world", "G0.1 &greet");
 
-is($::W, 0, "no warn G0");
+is($::W4, 0, "no warn G0");
 }
 
 {
@@ -110,7 +114,7 @@ ok(defined(\&greet), "G1 def&greet");
 is(greet("world"), "hello, world", "G1 &greet");
 
 
-is($::W, 0, "no warn G0");
+is($::W4, 0, "no warn G0");
 }
 
 __END__

@@ -4,11 +4,15 @@ use Test::More tests => 55;
 # test that the module keeps the reference to the object correctly
 
 BEGIN { 
-$::W = 0;
+$::W4 = 0;
 $SIG{__WARN__} = sub { 
 	my($t) = @_;
+	if ($t =~ m"\Awarning: Object::Import cannot find methods of " ||
+		$t =~ m"\ASubroutine .* redefined at .*\bObject/Import\.pm ") 
+	{
+		$::W4++;
+	}
 	warn $t;
-	$::W++;
 };
 }
 
@@ -142,6 +146,6 @@ is($c0, X::, "o0 val sneaky var");
 
 is($::DC, 5, "dcf very end 5");
 
-is($::W, 0, "no warn");
+is($::W4, 0, "no warn");
 
 __END__
