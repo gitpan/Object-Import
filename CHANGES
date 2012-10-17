@@ -1,3 +1,7 @@
+2012-10-17 v1.004 release to CPAN
+ - fix test t/05_nometh.t to not fail on some perl-bleads between 5.17.4 and 5.17.5
+ - have test t/13_nometh.t give clearer error message for some failure
+
 2012-10-14 v1.003 release to CPAN
  - explicitly require perl 5.008 in metafile and module -- module never 
     actually worked on older perls

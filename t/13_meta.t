@@ -1,5 +1,5 @@
 use warnings; use strict;
-use Test::More tests => 13;
+use Test::More tests => 14;
 
 use Object::Import ();
 
@@ -50,5 +50,7 @@ is_deeply(\%nm, {greet => 1}, "no other names exported G3");
 is(greet("world"), "hello world from X", "&greet Gb");
 }
 };
+my $eval_err = $@;
+is($eval_err, "", "eval ran fine");
 
 __END__

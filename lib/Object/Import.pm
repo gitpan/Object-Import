@@ -1,6 +1,6 @@
 package Object::Import;
 use warnings; 
-our $VERSION = 1.003;
+our $VERSION = 1.004;
 
 
 =head1 NAME
@@ -181,7 +181,7 @@ IO::Handle object would be like this:
 	use IO::File;
 	use Object::Import IO::File->new("somefile", "<");
 
-=head2 CHANGING THE OBJECT
+=head2 Changing the object
 
 The C<< deref >> option deserves special mention.  
 This option adds a level of indirection to the imported functions:
@@ -240,7 +240,7 @@ Our examples assume the following declarations:
 
 	use feature "say";
 
-=head2 BASIC USAGE
+=head2 Basic usage
 
 First a simple example of importing class methods.
 
@@ -259,7 +259,7 @@ Now let's see a simple example of importing object methods.
 
 This prints 200 (2 multiplied by 100), then 0xc8 (100 as hexadecimal).
 
-=head2 MULTIPLE IMPORTS
+=head2 Multiple imports
 
 Now let's see a more complicated example.  This prints the leading news from the English
 Wikinews website.
@@ -305,7 +305,7 @@ parts, but because if a new sub is added to a future version of the
 L<LWP::UserAgent> or L<HTTP::Response> classes, they might suddenly get
 imported and would shadow the methods we're supposed to import later.
 
-=head2 SUFFIX
+=head2 Suffix
 
 Now let's see an example of using a suffix.
 
@@ -319,7 +319,7 @@ Now let's see an example of using a suffix.
 Here we need the suffix because print and seek are names of builtin
 functions.  
 
-=head2 CREATING THE OBJECT LATER
+=head2 Creating the object later
 
 Let's see how we can import methods before we create an object.
 
@@ -335,7 +335,7 @@ Notice how here we're using the bmul function without parenthesis,
 so we must import it compile time for the code to parse correctly,
 but the object is not created till later.
 
-=head2 PROTOTYPE OBJECT
+=head2 Prototype object
 
 This code is the same as above, 
 except that instead of supplying a list of methods, 
@@ -350,7 +350,7 @@ would have no way to know what methods to import.
 	$number = Math::BigInt->new("100"); 
 	say double;
 
-=head2 EXPORTING TO OTHER PACKAGE
+=head2 Exporting to other package
 
 This example shows how to export to a different namespace.
 This is useful if you want to write your own
@@ -429,7 +429,7 @@ A copy of the GNU General Public License can be found in the
 source tree of this module under the name "GPL", or else see
 "http://www.gnu.org/licenses/".  A copy of the Artistic License can
 be found in the source tree under the name "ARTISTIC", or else see
-"http://cpansearch.perl.org/src/JESSE/perl-5.12.2/pod/perlartistic.pod".
+"http://search.cpan.org/~rjbs/perl-5.16.1/pod/perlartistic.pod".
 
 =cut
 
